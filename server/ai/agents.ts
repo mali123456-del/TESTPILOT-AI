@@ -1,0 +1,88 @@
+import type { AgentDefinition } from '../../shared/types.js';
+
+/** Agent workforce definitions. Each agent is limited to read-only analysis unless approved. */
+export const AGENTS: AgentDefinition[] = [
+  {
+    id: 'planner',
+    name: 'Test Planner',
+    role: 'planner',
+    description: 'Turns a requirement or project goal into a risk-based test plan with priorities and coverage gaps.',
+    scopes: ['projects:read', 'runs:read', 'cases:read'],
+    maxRunsPerHour: 20,
+    requiresApproval: false,
+  },
+  {
+    id: 'case-generator',
+    name: 'Test Case Generator',
+    role: 'generator',
+    description: 'Drafts executable test cases from requirements. Drafts require human approval before they enter a suite.',
+    scopes: ['cases:write:draft'],
+    maxRunsPerHour: 20,
+    requiresApproval: true,
+  },
+  {
+    id: 'automation-engineer',
+    name: 'Automation Engineer',
+    role: 'automation',
+    description: 'Designs workflow steps, retries and triggers for an existing suite.',
+    scopes: ['workflows:draft', 'suites:read'],
+    maxRunsPerHour: 10,
+    requiresApproval: false,
+  },
+  {
+    id: 'api-agent',
+    name: 'API Testing Agent',
+    role: 'api',
+    description: 'Generates API contract checks (status, schema, latency) for a given endpoint.',
+    scopes: ['cases:write:draft'],
+    maxRunsPerHour: 20,
+    requiresApproval: true,
+  },
+  {
+    id: 'bug-detector',
+    name: 'Bug Detection Agent',
+    role: 'detective',
+    description: 'Correlates failures across recent runs and proposes defect records with reproduction context.',
+    scopes: ['runs:read', 'cases:read', 'bugs:draft'],
+    maxRunsPerHour: 15,
+    requiresApproval: true,
+  },
+  {
+    id: 'debugger',
+    name: 'Debugging Assistant',
+    role: 'debugger',
+    description: 'Explains a failure using evidence, duration and error patterns, and proposes the next diagnostic step.',
+    scopes: ['runs:read'],
+    maxRunsPerHour: 30,
+    requiresApproval: false,
+  },
+  {
+    id: 'performance-analyst',
+    name: 'Performance Analyst',
+    role: 'performance',
+    description: 'Reads the latest load profiles and flags latency budget breaches with a concrete tuning direction.',
+    scopes: ['perf:read'],
+    maxRunsPerHour: 20,
+    requiresApproval: false,
+  },
+  {
+    id: 'security-reviewer',
+    name: 'Security Review Assistant',
+    role: 'security',
+    description: 'Summarises passive security findings and ranks remediation by severity and blast radius.',
+    scopes: ['security:read'],
+    maxRunsPerHour: 20,
+    requiresApproval: false,
+  },
+  {
+    id: 'report-writer',
+    name: 'QA Report Generator',
+    role: 'reporter',
+    description: 'Produces an explainable quality and release-readiness report from workspace evidence.',
+    scopes: ['runs:read', 'bugs:read', 'reports:write'],
+    maxRunsPerHour: 15,
+    requiresApproval: false,
+  },
+];
+
+export const agentById = (id: string): AgentDefinition | undefined => AGENTS.find((a) => a.id === id);
